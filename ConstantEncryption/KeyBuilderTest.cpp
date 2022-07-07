@@ -10,7 +10,7 @@ __declspec(noinline) static void TestKeyBuilder32()
     obfuscate::KeyBuilder<KeyT, DataT, 4> kb;
     printf("keyBuilderUL Key Builder [%X, %X, %X, %X]\n", kb.GetKey<0>(), kb.GetKey<1>(), kb.GetKey<2>(), kb.GetKey<3>());
 
-    constexpr DataT ceUL = kb.GetEncodedValueConstant<1337UL>(); // Wrong...
+    constexpr DataT ceUL = kb.GetEncodedValueConstant(1337UL); // Wrong...
     // printf("uint32_t Encoded [Constant]: %d\n", ceUL);
 
     DataT reUL = kb.GetEncodedValueRuntime(valueUL); // Correct
@@ -39,7 +39,7 @@ __declspec(noinline) static void TestKeyBuilder64()
     obfuscate::KeyBuilder<KeyT, DataT, 4> kb;
     printf("keyBuilderULL Key Builder [%I64X, %I64X, %I64X, %I64X]\n", kb.GetKey<0>(), kb.GetKey<1>(), kb.GetKey<2>(), kb.GetKey<3>());
 
-    constexpr DataT ceULL = kb.GetEncodedValueConstant<1337ULL>();
+    constexpr DataT ceULL = kb.GetEncodedValueConstant(1337ULL);
     // printf("uint64_t Encoded [Constant]: %I64d\n", ceULL);
 
     DataT reULL = kb.GetEncodedValueRuntime(valueULL);

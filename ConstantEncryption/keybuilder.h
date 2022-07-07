@@ -15,23 +15,23 @@ namespace obfuscate
         using DataType = DataT;
 
         // Constructor
-        constexpr KeyBuilder() :
+        __forceinline constexpr KeyBuilder() :
             m_keys { InitializeKeyArray(std::make_index_sequence<KeyCount>()) } {}
 
-        constexpr size_t GetKeyCount() const { return KeyCount; }
+        __forceinline constexpr size_t GetKeyCount() const { return KeyCount; }
 
         template<size_t Index>
-        static constexpr KeyT GetKey()
+        __forceinline static constexpr KeyT GetKey()
         {
             return random::RandomGenerator<KeyT, Index>::Generate();
         }
 
-        KeyT GetKeyRuntime(size_t index)
+        __forceinline KeyT GetKeyRuntime(size_t index)
         {
             return m_keys[index];
         }
 
-        __declspec(noinline) constexpr DataT GetEncodedValueRuntime(const DataT& value) const
+        __forceinline constexpr DataT GetEncodedValueRuntime(const DataT& value) const
         {
             volatile DataT ret = value;
 
@@ -43,7 +43,7 @@ namespace obfuscate
             return ret;
         }
 
-        __forceinline DataT GetDecodedValueRuntime(const DataT& value)
+        __forceinline DataT GetDecodedValueRuntime(const DataT& value) const
         {
             volatile std::remove_const_t<DataT> ret = value;
 
@@ -58,49 +58,43 @@ namespace obfuscate
         template<size_t Index>
         struct KeyApplicator
         {
-            template<DataT value>
+            constexpr KeyApplicator(DataT value) : value(value) {}
+
             __forceinline constexpr DataT GetValue()
             {
-                volatile constexpr KeyT a = random::RandomGenerator<KeyT, Index>::Generate();
-                volatile constexpr DataT nextValue = static_cast<DataT>(a ^ value);
-
                 using NextApplicatorT = KeyApplicator<Index + 1>;
 
-                return NextApplicatorT().GetValue<nextValue>();
+                return NextApplicatorT(random::RandomGenerator<KeyT, Index>::Generate() ^ value).GetValue();
             }
+
+            DataT value;
         };
 
         template<>
         struct KeyApplicator<KeyCount>
         {
-            // We need to pass index_sequence for the key sequence
-            // then we can go thru them.... yeesh
-            template<DataT value>
+            constexpr KeyApplicator(DataT value) : value(value) {}
+
             __forceinline constexpr DataT GetValue()
             {
                 return value;
             }
+
+            DataT value;
         };
 
-        template<DataT value>
-        __forceinline constexpr DataT GetEncodedValueConstant() const
+        __forceinline constexpr DataT GetEncodedValueConstant(DataT value) const
         {
             using ApplicatorT = KeyApplicator<0U>;
 
-            volatile auto v = ApplicatorT().GetValue<value>();
+            volatile auto v = ApplicatorT(value).GetValue();
 
             return v;
         }
 
     private:
-        template<typename T, size_t N, size_t... Is>
-        constexpr auto InitializeKeyNativeArray(std::index_sequence<Is...>)
-        {
-            return { static_cast<KeyT>(random::RandomGenerator<KeyT, Is>::Generate())... };
-        }
-
         template<std::size_t... Is>
-        constexpr SimpleArray<KeyT, KeyCount> InitializeKeyArray(std::index_sequence<Is...>)
+        __forceinline constexpr SimpleArray<KeyT, KeyCount> InitializeKeyArray(std::index_sequence<Is...>)
         {
             return SimpleArray<KeyT, KeyCount> { static_cast<KeyT>(GetKey<Is>())... };
         }

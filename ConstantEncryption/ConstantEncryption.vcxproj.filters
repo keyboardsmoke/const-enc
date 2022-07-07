@@ -56,5 +56,8 @@
     <ClInclude Include="const_string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="const_sequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

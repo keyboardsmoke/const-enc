@@ -38,29 +38,29 @@ namespace obfuscate
 		SimpleArray() = delete;
 
 		template<typename... Values>
-		constexpr SimpleArray(const Values&... values) : raw_data{ values... } {}
+		__forceinline constexpr SimpleArray(const Values&... values) : raw_data{ values... } {}
 
-		constexpr char* data()
+		__forceinline constexpr char* data()
 		{
 			return reinterpret_cast<char*>(raw_data);
 		}
 
-		constexpr ArrayT* udata()
+		__forceinline constexpr ArrayT* udata()
 		{
 			return raw_data;
 		}
 
-		constexpr size_t size() const
+		__forceinline constexpr size_t size() const
 		{
 			return N;
 		}
 
-		constexpr ArrayT operator[](size_t index) const
+		__forceinline constexpr ArrayT operator[](size_t index) const
 		{
 			return raw_data[index];
 		}
 
-		constexpr ArrayT& operator[](size_t index)
+		__forceinline constexpr ArrayT& operator[](size_t index)
 		{
 			return raw_data[index];
 		}

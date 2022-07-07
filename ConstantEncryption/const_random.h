@@ -87,11 +87,11 @@ namespace obfuscate
                 // expanded to 64-bit by Andy :))
 
                 constexpr uint64_t a = 1844674407370955161; // 2^64-1
-                constexpr uint64_t lo_p1 = a * (local_seed & 0xffffffff);
-                constexpr uint64_t hi_p1 = a * (local_seed >> 32);
-                constexpr uint64_t lo_p2 = lo_p1 + ((hi_p1 & 0x7fffffff) << 32);
-                constexpr uint64_t lo_p3 = lo_p2 + hi_p1;
-                constexpr uint64_t losub = (lo_p3 > 0x7fffffffffffffff) ? lo_p3 - 0x7fffffffffffffff : lo_p3;
+                constexpr uint64_t lo_p1 = static_cast<uint64_t>(a * (local_seed & 0xffffffff));
+                constexpr uint64_t hi_p1 = static_cast<uint64_t>(a * (local_seed >> 32));
+                constexpr uint64_t lo_p2 = static_cast<uint64_t>(lo_p1 + ((hi_p1 & 0x7fffffff) << 32));
+                constexpr uint64_t lo_p3 = static_cast<uint64_t>(lo_p2 + hi_p1);
+                constexpr uint64_t losub = static_cast<uint64_t>((lo_p3 > 0x7fffffffffffffff) ? lo_p3 - 0x7fffffffffffffff : lo_p3);
                 return losub;
             }
         };

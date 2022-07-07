@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include "const_time.h"
+#include "const_sequence.h"
 #include "const_hash.h"
 
 namespace obfuscate
