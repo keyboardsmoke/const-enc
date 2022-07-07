@@ -8,13 +8,50 @@ namespace obfuscate
 {
     // TODO: CipherT would allow for more than XOR.
 
+    enum class Ciphers
+    {
+        Xor,
+        SubAdd,
+        Caesar
+    };
+
+    template<typename DataT, typename KeyT, Ciphers CipherType>
+    struct Cipher;
+
+    template<typename DataT, typename KeyT>
+    struct Cipher<DataT, KeyT, Ciphers::Xor>
+    {
+        static constexpr KeyT Encode(const DataT value, const KeyT key)
+        {
+            return key ^ value;
+        }
+
+        static constexpr DataT Decode(const KeyT value, const KeyT key)
+        {
+            return key ^ value;
+        }
+    };
+
+    template<typename DataT, typename KeyT>
+    struct Cipher<DataT, KeyT, Ciphers::SubAdd>
+    {
+        static constexpr KeyT Encode(const DataT value, const KeyT key)
+        {
+            return value - key;
+        }
+
+        static constexpr DataT Decode(const KeyT value, const KeyT key)
+        {
+            return value + key;
+        }
+    };
+
     template<typename KeyT, typename DataT, size_t KeyCount>
     struct KeyBuilder
     {
         constexpr static size_t KeyMax = KeyCount;
 
-        using KeyType = KeyT;
-        using DataType = DataT;
+        using CipherT = Cipher<DataT, KeyT, static_cast<Ciphers>(RANDOM_UINT(size_t, 0, 1))>;
 
         // Constructor
         __forceinline constexpr KeyBuilder() :
@@ -39,7 +76,7 @@ namespace obfuscate
 
             for (size_t i = 0; i < m_keys.size(); ++i)
             {
-                ret ^= m_keys[i];
+                ret = CipherT::Encode(ret, m_keys[i]);
             }
 
             return ret;
@@ -51,7 +88,7 @@ namespace obfuscate
 
             for (auto i = m_keys.size(); i--;)
             {
-                ret ^= m_keys[i];
+                ret = CipherT::Encode(ret, m_keys[i]);
             }
 
             return ret;
@@ -66,7 +103,7 @@ namespace obfuscate
             {
                 using NextApplicatorT = KeyApplicator<Index + 1>;
 
-                return NextApplicatorT(random::RandomGenerator<KeyT, Index>::Generate() ^ value).GetValue();
+                return NextApplicatorT(CipherT::Encode(value, random::RandomGenerator<KeyT, Index>::Generate())).GetValue();
             }
 
             DataT value;
