@@ -2,18 +2,23 @@
 
 #include <cstdint>
 #include "const_time.h"
-#include "const_sequence.h"
 #include "const_hash.h"
 
 namespace obfuscate
 {
+    // TODO: These seeds are generated once, but the keys are not. Yet they start from the same seed.
+    // Wondering if rolling this somehow is possible.
+    // Why: If we use time in headers, key builder may not produce consistent results
+    // Maybe omitting the second could mitigate that but, who cares. We just need a solid seed. Random should be able to roll it well.
     namespace random
     {
         // Generate these here, once...
-        static constexpr uint8_t seed8 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // static_cast<uint8_t>(time::Get<uint32_t>());
-        static constexpr uint16_t seed16 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // static_cast<uint16_t>(time::Get<uint32_t>());
-        static constexpr uint32_t seed32 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // time::Get<uint32_t>();
-        static constexpr uint64_t seed64 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // time::Get<uint64_t>();
+        static constexpr uint64_t master_seed = __cplusplus * obfuscate::constant::hash::CRC64::WSID(__DATE__);
+
+        static constexpr uint8_t seed8 = static_cast<uint8_t>(master_seed);
+        static constexpr uint16_t seed16 = static_cast<uint16_t>(master_seed);
+        static constexpr uint32_t seed32 = static_cast<uint32_t>(master_seed);
+        static constexpr uint64_t seed64 = static_cast<uint64_t>(master_seed);
     }
 }
 
@@ -61,6 +66,6 @@ namespace obfuscate
     struct Constant;
 }
 
-#include "keybuilder.h"
-#include "integer.h"
+#include "const_keybuilder.h"
+#include "const_integer.h"
 #include "const_string.h"

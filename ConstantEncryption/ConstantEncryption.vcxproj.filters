@@ -38,25 +38,19 @@
     <ClInclude Include="const_hash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="const_assign.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="const_random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="const_time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="integer.h">
+    <ClInclude Include="const_integer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="keybuilder.h">
+    <ClInclude Include="const_keybuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="const_string.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="const_sequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

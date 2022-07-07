@@ -138,14 +138,12 @@
   <ItemGroup>
     <ClInclude Include="constant.h" />
     <ClInclude Include="const_array.h" />
-    <ClInclude Include="const_assign.h" />
     <ClInclude Include="const_hash.h" />
     <ClInclude Include="const_random.h" />
-    <ClInclude Include="const_sequence.h" />
     <ClInclude Include="const_string.h" />
     <ClInclude Include="const_time.h" />
-    <ClInclude Include="integer.h" />
-    <ClInclude Include="keybuilder.h" />
+    <ClInclude Include="const_integer.h" />
+    <ClInclude Include="const_keybuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
