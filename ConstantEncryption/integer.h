@@ -17,16 +17,20 @@ namespace obfuscate
         // How do we call the constructor with a value inline? Can't use ConstantInteger<uint32_t, value>
         // If we try to use ConstantInteger<value> it says, no, we need a type. So we force the compiler's hand without
         // compromising our "value" to the stack. Jeez.
-        template<T value>
-        constexpr ConstantInteger() : m_keys(), m_encoded{m_keys.GetEncodedValueConstant<value>()} { }
+        explicit constexpr ConstantInteger() noexcept : m_keys() { }
 
-        __forceinline T Decode() noexcept
+        template<T value>
+        constexpr T Encode()
         {
-            volatile T a = static_cast<T>(m_keys.GetDecodedValueRuntime(m_encoded));
+            return m_keys.GetEncodedValueConstant<value>();
+        }
+
+        __forceinline T Decode(StorageT encoded) noexcept
+        {
+            volatile T a = static_cast<T>(m_keys.GetDecodedValueRuntime(encoded));
             return a;
         }
 
         KeyBuilder<StorageT, T, KeyCount> m_keys;
-        StorageT m_encoded;
     };
 }

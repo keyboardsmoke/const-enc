@@ -23,8 +23,6 @@ namespace obfuscate
         template<size_t Index>
         static constexpr KeyT GetKey()
         {
-            // Should be reproducable...
-
             return random::RandomGenerator<KeyT, Index>::Generate();
         }
 
@@ -45,9 +43,9 @@ namespace obfuscate
             return ret;
         }
 
-        __declspec(noinline) DataT GetDecodedValueRuntime(const DataT& value)
+        __forceinline DataT GetDecodedValueRuntime(const DataT& value)
         {
-            volatile DataT ret = value;
+            volatile std::remove_const_t<DataT> ret = value;
 
             for (auto i = m_keys.size(); i--;)
             {
@@ -59,7 +57,7 @@ namespace obfuscate
 
         template<size_t Index>
         struct KeyApplicator
-        { // std::integer_sequence<KeyT>
+        {
             template<DataT value>
             __forceinline constexpr DataT GetValue()
             {

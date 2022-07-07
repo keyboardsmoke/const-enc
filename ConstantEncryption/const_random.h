@@ -6,10 +6,6 @@ namespace obfuscate
 {
     namespace random
     {
-        static constexpr uint8_t seed8 = static_cast<uint8_t>(time::Get<uint32_t>());
-        static constexpr uint32_t seed32 = time::Get<uint32_t>();
-        static constexpr uint64_t seed64 = time::Get<uint64_t>();
-
         template<typename T, size_t Counter>
         struct RandomGenerator;
 
@@ -27,7 +23,25 @@ namespace obfuscate
         {
             static constexpr uint8_t Generate()
             {
-                return seed8;
+                return obfuscate::random::seed8;
+            }
+        };
+
+        template<size_t Counter> struct RandomGenerator<uint16_t, Counter>
+        {
+            static constexpr uint16_t Generate()
+            {
+                constexpr uint32_t local_seed = RandomGenerator<uint32_t, Counter - 1>::Generate();
+
+                return static_cast<uint16_t>(local_seed * (Counter + 1));
+            }
+        };
+
+        template<> struct RandomGenerator<uint16_t, 0UL>
+        {
+            static constexpr uint16_t Generate()
+            {
+                return obfuscate::random::seed16;
             }
         };
 
@@ -58,7 +72,7 @@ namespace obfuscate
         {
             static constexpr uint32_t Generate()
             {
-                return seed32;
+                return obfuscate::random::seed32;
             }
         };
 
@@ -86,7 +100,7 @@ namespace obfuscate
         {
             static constexpr uint64_t Generate()
             {
-                return seed64;
+                return obfuscate::random::seed64;
             }
         };
     }
@@ -94,4 +108,4 @@ namespace obfuscate
 
 // random::RandomGenerator<KeyT, Counter + Index>::Generate();
 
-#define RANDOM_UINT(type, minrand, maxrand) (((obfuscate::random::RandomGenerator<type, __COUNTER__>::Generate()) % maxrand) + minrand)
+#define RANDOM_UINT(type, minrand, maxrand) (((obfuscate::random::RandomGenerator<type, __COUNTER__>::Generate()) % (maxrand)) + (minrand))

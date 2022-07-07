@@ -1,8 +1,22 @@
 #pragma once
 
+#include <cstdint>
 #include "const_time.h"
-#include "const_array.h"
 #include "const_hash.h"
+
+namespace obfuscate
+{
+    namespace random
+    {
+        // Generate these here, once...
+        static constexpr uint8_t seed8 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // static_cast<uint8_t>(time::Get<uint32_t>());
+        static constexpr uint16_t seed16 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // static_cast<uint16_t>(time::Get<uint32_t>());
+        static constexpr uint32_t seed32 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // time::Get<uint32_t>();
+        static constexpr uint64_t seed64 = static_cast<uint8_t>(__cplusplus * obfuscate::constant::hash::CRC32::WSID(__DATE__)); // time::Get<uint64_t>();
+    }
+}
+
+#include "const_array.h"
 #include "const_random.h"
 
 #include <type_traits>
@@ -42,7 +56,7 @@ namespace obfuscate
         }
     };
 
-    template<typename T, T value>
+    template<typename T>
     struct Constant;
 }
 
