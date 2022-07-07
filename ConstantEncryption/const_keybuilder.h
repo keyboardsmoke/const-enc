@@ -6,6 +6,8 @@
 
 namespace obfuscate
 {
+    // TODO: CipherT would allow for more than XOR.
+
     template<typename KeyT, typename DataT, size_t KeyCount>
     struct KeyBuilder
     {

@@ -8,10 +8,12 @@ namespace obfuscate
 		static_assert(N != 0, "Length cannot be zero.");
 		static_assert(std::is_const_v<T>, "String char type must be const.");
 
-		static constexpr bool IsBlock8 = (N == 1);
-		static constexpr bool IsBlock16 = ((N % 2) == 0);
-		static constexpr bool IsBlock32 = ((N % 4) == 0);
-		static constexpr bool IsBlock64 = ((N % 8) == 0);
+		static constexpr size_t DataSize = N * sizeof(T);
+
+		static constexpr bool IsBlock8 = (DataSize == 1);
+		static constexpr bool IsBlock16 = ((DataSize % 2) == 0);
+		static constexpr bool IsBlock32 = ((DataSize % 4) == 0);
+		static constexpr bool IsBlock64 = ((DataSize % 8) == 0);
 
 		// Select the granularity to encrypt the string at
 		// It can use uint8, uint16, uint32, uint64

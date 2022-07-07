@@ -52,7 +52,7 @@ namespace obfuscate
             {
                 constexpr uint32_t local_seed = RandomGenerator<uint32_t, Counter - 1>::Generate();
 
-                auto losub = constant::XorShift<uint32_t, local_seed>::Get();
+                constexpr auto losub = constant::XorShift<uint32_t, local_seed>::Get();
 
                 // implemented with G. Carta's optimisation: with 32-bit math and without division
                 // https://www.firstpr.com.au/dsp/rand31/
@@ -87,7 +87,7 @@ namespace obfuscate
             {
                 constexpr uint64_t local_seed = RandomGenerator<uint64_t, Counter - 1>::Generate();
 
-                auto losub = constant::XorShift<uint64_t, local_seed>::Get();
+                constexpr auto losub = constant::XorShift<uint64_t, local_seed>::Get();
 
                 // implemented with G. Carta's optimisation: with 32-bit math and without division
                 // https://www.firstpr.com.au/dsp/rand31/

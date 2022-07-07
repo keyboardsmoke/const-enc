@@ -10,7 +10,9 @@ __declspec(noinline) static void int_test()
     auto v = obfuscate::ConstantInteger<uint64_t>();
     auto e = v.EncodeConstant(0x1337133713371337);
 
-    REQUIRE(sane == v.Decode(e));
+    [&]() {
+        REQUIRE(sane == v.Decode(e));
+    }();
 }
 
 TEST_CASE("Integer")
